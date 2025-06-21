@@ -1,0 +1,23 @@
+name: Super Cool Compose Stack
+services:
+  api:
+    image: mysupercoolapp:latest-${NODE_ENV}
+    build: .
+    env_file: .env
+    # environment overwrites .env file
+    environment:
+    # Interpolated variables can have a fallback value using ":-"
+      - DATABASE_URL=mongodb://mongo:27017/mycoolappdatabase-${NODE_ENV:-defaultenvironment}
+    ports:
+      - 5432:3000
+  mongo:
+    image: mongo
+    volumes:
+      # - ./mongodbdata:/data/db
+      - mongodb-data:/data/db
+    ports:
+      - 54321:27017
+
+volumes:
+  mongodb-data:
+    driver: local
